@@ -1,0 +1,92 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+#
+# caldova-ops-advisor-live: one agent per azure.yaml. Run azd from this folder.
+# The project, connection and toolbox below are the shared Caldova pieces (repeated so the folder deploys on its own).
+# Before you deploy, see ../../../SETUP.md (sets CALDOVA_OPS_MCP_URL and _KEY, and the harness preview flag).
+#   azd deploy caldova-ops-advisor-live
+
+name: caldova-ops-advisor-live
+
+requiredVersions:
+  azd: '>=1.37.0'
+  extensions:
+    azure.ai.agents: '>=1.0.0-beta.22'
+    azure.ai.connections: '>=1.0.0-beta.8'
+    azure.ai.toolboxes: '>=1.0.0-beta.8'
+
+services:
+  ai-project:
+    host: azure.ai.project
+    endpoint: ${AZURE_AI_PROJECT_ENDPOINT}
+    deployments: []
+
+  # ---------------------------------------------------------------- shared
+  # Caldova's trusted business tools. The key lives in the project connection;
+  # no agent, prompt or skill ever sees it.
+  caldova-ops-conn:
+    host: azure.ai.connection
+    uses:
+      - ai-project
+    category: RemoteTool
+    target: ${CALDOVA_OPS_MCP_URL}
+    authType: CustomKeys
+    credentials:
+      type: CustomKeys
+      keys:
+        x-caldova-key: '${CALDOVA_OPS_MCP_KEY}'
+    env:
+      CALDOVA_OPS_MCP_URL: ${CALDOVA_OPS_MCP_URL}
+      CALDOVA_OPS_MCP_KEY: ${CALDOVA_OPS_MCP_KEY}
+
+  caldova-ops:
+    host: azure.ai.toolbox
+    uses:
+      - ai-project
+      - caldova-ops-conn
+    description: Caldova operations evidence (synthetic). Read-only records behind one MCP endpoint.
+    env:
+      CALDOVA_OPS_MCP_URL: ${CALDOVA_OPS_MCP_URL}
+    tools:
+      - type: mcp
+        server_label: caldova_ops
+        server_url: ${CALDOVA_OPS_MCP_URL}
+        connection: caldova-ops-conn
+        require_approval: never
+
+  caldova-ops-advisor-live:
+    host: azure.ai.agent
+    project: .
+    language: python
+    kind: hosted
+    name: caldova-ops-advisor-live
+    description: Live-built hosted Caldova Operations Advisor. Read-only evidence, recommends only. Synthetic data.
+    uses:
+      - ai-project
+      - caldova-ops
+    codeConfiguration:
+      runtime: python_3_13
+      entryPoint: main.py
+      dependencyResolution: remote_build
+    protocols:
+      - protocol: responses
+        version: 2.0.0
+    policies:
+      - type: rai_policy
+        raiPolicyName: /subscriptions/<subscription-id>/resourceGroups/<resource-group>/providers/Microsoft.CognitiveServices/accounts/<account>/raiPolicies/caldova-default
+    env:
+      PYTHONNOUSERSITE: "1"
+      AZURE_AI_MODEL_DEPLOYMENT_NAME: gpt-6.1-sol
+      AZURE_AI_EMBEDDING_DEPLOYMENT_NAME: text-embedding-3-small
+      TOOLBOX_ENDPOINT: ${TOOLBOX_CALDOVA_OPS_MCP_ENDPOINT}
+    container:
+      resources:
+        cpu: "0.5"
+        memory: 1Gi
+    metadata:
+      tags:
+        - Agent Framework
+        - Responses Protocol
+        - Caldova
+
+infra:
+  provider: microsoft.foundry

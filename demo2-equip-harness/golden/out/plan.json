@@ -1,0 +1,348 @@
+{
+  "scenario": "caldova-aller-capacity-disruption",
+  "status": "recommendation only - no operational action taken",
+  "basis": "planner demand file",
+  "weeks": [
+    {
+      "week": 1,
+      "week_start": "2026-11-23",
+      "gap": 1100,
+      "supplier_allocations": [
+        {
+          "supplier": "Aster Ridge",
+          "units": 1100
+        }
+      ],
+      "covered": 1100,
+      "routes": {
+        "Cedar": 600,
+        "Birch": 500
+      },
+      "unrouted": 0,
+      "residual_gap": 0
+    },
+    {
+      "week": 2,
+      "week_start": "2026-11-30",
+      "gap": 1400,
+      "supplier_allocations": [
+        {
+          "supplier": "Aster Ridge",
+          "units": 1200
+        }
+      ],
+      "covered": 1200,
+      "routes": {
+        "Cedar": 600,
+        "Birch": 600
+      },
+      "unrouted": 0,
+      "residual_gap": 200
+    },
+    {
+      "week": 3,
+      "week_start": "2026-12-07",
+      "gap": 1800,
+      "supplier_allocations": [
+        {
+          "supplier": "Aster Ridge",
+          "units": 1200
+        }
+      ],
+      "covered": 1200,
+      "routes": {
+        "Cedar": 600,
+        "Birch": 600
+      },
+      "unrouted": 0,
+      "residual_gap": 600
+    },
+    {
+      "week": 4,
+      "week_start": "2026-12-14",
+      "gap": 1700,
+      "supplier_allocations": [
+        {
+          "supplier": "Aster Ridge",
+          "units": 1200
+        }
+      ],
+      "covered": 1200,
+      "routes": {
+        "Cedar": 600,
+        "Birch": 600
+      },
+      "unrouted": 0,
+      "residual_gap": 500
+    },
+    {
+      "week": 5,
+      "week_start": "2026-12-21",
+      "gap": 1500,
+      "supplier_allocations": [
+        {
+          "supplier": "Aster Ridge",
+          "units": 1200
+        }
+      ],
+      "covered": 1200,
+      "routes": {
+        "Cedar": 600,
+        "Birch": 600
+      },
+      "unrouted": 0,
+      "residual_gap": 300
+    },
+    {
+      "week": 6,
+      "week_start": "2026-12-28",
+      "gap": 1500,
+      "supplier_allocations": [
+        {
+          "supplier": "Aster Ridge",
+          "units": 1200
+        }
+      ],
+      "covered": 1200,
+      "routes": {
+        "Cedar": 600,
+        "Birch": 600
+      },
+      "unrouted": 0,
+      "residual_gap": 300
+    }
+  ],
+  "totals": {
+    "gap": 9000,
+    "covered": 7100,
+    "residual_gap": 1900
+  },
+  "suppliers": [
+    {
+      "supplier": "Aster Ridge",
+      "available_units_per_week": 1200,
+      "qualification": "complete",
+      "overdue_corrective_actions": 0,
+      "risk": "routine monitoring",
+      "risk_sources": [
+        "RISK-001",
+        "RISK-POLICY"
+      ],
+      "eligible_to_recommend": true,
+      "blockers": [],
+      "escalate_to": []
+    },
+    {
+      "supplier": "Northbank",
+      "available_units_per_week": 1800,
+      "qualification": "pending",
+      "overdue_corrective_actions": 2,
+      "risk": "elevated",
+      "risk_sources": [
+        "RISK-001",
+        "RISK-POLICY"
+      ],
+      "eligible_to_recommend": false,
+      "blockers": [
+        {
+          "reason": "qualification review pending",
+          "sources": [
+            "CAP-001",
+            "RISK-001"
+          ]
+        },
+        {
+          "reason": "2 overdue corrective actions",
+          "sources": [
+            "RISK-001"
+          ]
+        }
+      ],
+      "escalate_to": [
+        "Supplier Assurance",
+        "Quality"
+      ]
+    }
+  ],
+  "routes": {
+    "assessed": [
+      {
+        "name": "Cedar",
+        "transit_days": 2,
+        "max_units_per_week": 600,
+        "assessed": true
+      },
+      {
+        "name": "Birch",
+        "transit_days": 4,
+        "max_units_per_week": 1000,
+        "assessed": true
+      }
+    ],
+    "unassessed": [
+      {
+        "name": "Elm",
+        "transit_days": null,
+        "max_units_per_week": null,
+        "assessed": false
+      }
+    ]
+  },
+  "what_if_blocked_suppliers_cleared": [
+    {
+      "week": 1,
+      "additional_units_if_cleared": 0,
+      "units_to_route": 1100,
+      "documented_route_capacity": 1600,
+      "route_shortfall": 0
+    },
+    {
+      "week": 2,
+      "additional_units_if_cleared": 200,
+      "units_to_route": 1400,
+      "documented_route_capacity": 1600,
+      "route_shortfall": 0
+    },
+    {
+      "week": 3,
+      "additional_units_if_cleared": 600,
+      "units_to_route": 1800,
+      "documented_route_capacity": 1600,
+      "route_shortfall": 200
+    },
+    {
+      "week": 4,
+      "additional_units_if_cleared": 500,
+      "units_to_route": 1700,
+      "documented_route_capacity": 1600,
+      "route_shortfall": 100
+    },
+    {
+      "week": 5,
+      "additional_units_if_cleared": 300,
+      "units_to_route": 1500,
+      "documented_route_capacity": 1600,
+      "route_shortfall": 0
+    },
+    {
+      "week": 6,
+      "additional_units_if_cleared": 300,
+      "units_to_route": 1500,
+      "documented_route_capacity": 1600,
+      "route_shortfall": 0
+    }
+  ],
+  "packet_review": {
+    "packet_id": "CP-104",
+    "proposed_supplier": "Northbank",
+    "status": "hold: incomplete, not approved",
+    "missing": [
+      {
+        "item": "qualification evidence",
+        "owner": "Quality"
+      },
+      {
+        "item": "Procurement signature",
+        "owner": "Procurement"
+      },
+      {
+        "item": "Quality signature",
+        "owner": "Quality"
+      },
+      {
+        "item": "rollback plan",
+        "owner": "Change owner"
+      }
+    ],
+    "sources": [
+      "PACKET-001",
+      "PACKET-POLICY"
+    ]
+  },
+  "contract_watch": {
+    "supplier": "Aster Ridge",
+    "covered": [
+      "tablet compression",
+      "film coating",
+      "visual inspection",
+      "standard bottle packaging"
+    ],
+    "requires_written_authorization": [
+      "blister packs",
+      "market-specific cartons"
+    ],
+    "authorization_owner": "Procurement",
+    "sources": [
+      "CONTRACT-AR-001"
+    ]
+  },
+  "approvals_required": [
+    {
+      "decision": "Commit Aster Ridge capacity",
+      "approvers": [
+        "Procurement",
+        "Quality"
+      ],
+      "sources": [
+        "CAP-POLICY"
+      ]
+    },
+    {
+      "decision": "Change route allocations (Cedar, Birch)",
+      "approvers": [
+        "Distribution Lead",
+        "Quality"
+      ],
+      "sources": [
+        "DIST-POLICY"
+      ]
+    }
+  ],
+  "escalations": [
+    {
+      "item": "Northbank: elevated risk (qualification review pending; 2 overdue corrective actions)",
+      "to": [
+        "Supplier Assurance",
+        "Quality"
+      ],
+      "sources": [
+        "RISK-001",
+        "RISK-POLICY"
+      ]
+    },
+    {
+      "item": "Route Elm: not assessed, no transit or allocation values",
+      "to": [
+        "Supply Chain Operations"
+      ],
+      "sources": [
+        "DIST-001",
+        "DIST-POLICY"
+      ]
+    },
+    {
+      "item": "1,900 units of the gap remain uncovered (weeks 2, 3, 4, 5, 6) after eligible capacity",
+      "to": [
+        "Manufacturing Operations",
+        "Procurement"
+      ],
+      "sources": [
+        "DISRUPT-001",
+        "CAP-001"
+      ]
+    }
+  ],
+  "sources_used": [
+    "CAP-001",
+    "CAP-POLICY",
+    "CONTRACT-AR-001",
+    "DISRUPT-001",
+    "DIST-001",
+    "DIST-POLICY",
+    "PACKET-001",
+    "PACKET-POLICY",
+    "RISK-001",
+    "RISK-POLICY"
+  ],
+  "plan_id": "PLAN-cba94f0310"
+}

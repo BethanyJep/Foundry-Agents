@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Caldova Ops Runtime · hosted agent demo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314147a'/%3E%3Ctext x='16' y='23' font-size='20' font-weight='800' text-anchor='middle' fill='white' font-family='Arial'%3EC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">C</span>
+    <div><h1><b>Caldova</b> Operations Runtime</h1><small>DISRUPT-001 · ALLER tablet line · synthetic training scenario</small></div>
+  </div>
+  <div class="pills">
+    <span class="pill" id="pill-agent" title="Hosted agent in Foundry Agent Service">agent</span>
+    <span class="pill" id="pill-store"></span>
+  </div>
+</header>
+
+<nav class="beats" id="beats" aria-label="Demo beats"></nav>
+
+<section class="pipe" id="pipe" aria-label="How a recommendation flows">
+  <div class="node" data-node="model"><b>Model</b><small>proposes</small></div>
+  <div class="wire" aria-hidden="true"></div>
+  <div class="node" data-node="gate"><b>Policy gate</b><small>Caldova's code</small></div>
+  <div class="wire" aria-hidden="true"></div>
+  <div class="node" data-node="store"><b>Case file</b><small>Foundry state store</small></div>
+  <i class="packet" aria-hidden="true"></i>
+  <p class="pipe-caption" id="pipe-caption" role="status">Model proposes. Code decides. The case file records.</p>
+</section>
+
+<main class="cols">
+  <section class="panel" id="col-chat" aria-labelledby="h-chat">
+    <h2 id="h-chat"><span>Conversation</span><span class="chip" id="session-chip"></span></h2>
+    <div class="scroll" id="chat" role="log" aria-label="Conversation with the hosted agent" tabindex="0"></div>
+    <div class="suggest" id="suggest"></div>
+    <form id="composer" autocomplete="off" aria-label="Message the agent">
+      <input id="msg" placeholder="Ask the agent…" aria-label="Message for the agent" maxlength="2000">
+      <button class="primary" id="send" type="submit">Send</button>
+    </form>
+  </section>
+
+  <section class="panel" id="col-case" aria-labelledby="h-case">
+    <h2 id="h-case"><span>Case file</span><span><span class="chip" id="case-id"></span> <button class="chip btn" id="new-case" type="button" title="Start a fresh demo case">New demo case</button></span></h2>
+    <div class="scroll" id="case" role="region" aria-label="Case file contents" tabindex="0"></div>
+  </section>
+
+  <section class="panel" id="col-gate" aria-labelledby="h-gate">
+    <h2 id="h-gate"><span>Policy gate console</span><span class="chip">code, not a prompt</span></h2>
+    <div class="scroll" id="gate" role="region" aria-label="Policy gate console contents" tabindex="0"></div>
+  </section>
+</main>
+
+<footer class="strap"><b>Instructions ask. Code enforces.</b><span>The agent recommends; people decide. Nothing here books capacity, changes allocations or approves anything.</span></footer>
+
+<div id="finale" hidden>
+  <div class="finale-card" role="dialog" aria-modal="true" aria-labelledby="finale-title">
+    <p class="eyebrow">That's the whole story</p>
+    <h2 id="finale-title">Instructions ask.<br>Code enforces.</h2>
+    <div class="stats" id="finale-stats"></div>
+    <div class="finale-actions">
+      <button class="primary" id="finale-close" type="button">Back to the demo</button>
+      <button class="secondary" id="finale-again" type="button">Run again with a new case</button>
+    </div>
+  </div>
+</div>
+<div id="toast" role="status"></div>
+<script src="/app.js"></script>
+</body>
+</html>

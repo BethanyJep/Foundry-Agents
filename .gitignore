@@ -1,0 +1,12 @@
+.azure/
+.env
+.venv/
+__pycache__/
+*.pyc
+downloads/
+all-up-resources/.ask-state.json
+.impeccable
+.vscode
+.DS_Store
+~$*
+*.egg-info/

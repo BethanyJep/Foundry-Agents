@@ -1,0 +1,111 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+#
+# caldova-ops-runtime: one agent per azure.yaml. Run azd from this folder.
+# The project, connection and toolbox below are the shared Caldova pieces (repeated so the folder deploys on its own).
+# Before you deploy, see ../../../SETUP.md (sets CALDOVA_OPS_MCP_URL and _KEY, and the harness preview flag).
+#   azd deploy caldova-ops-runtime caldova-morning-sweep
+
+name: caldova-ops-runtime
+
+requiredVersions:
+  azd: '>=1.37.0'
+  extensions:
+    azure.ai.agents: '>=1.0.0-beta.22'
+    azure.ai.connections: '>=1.0.0-beta.8'
+    azure.ai.toolboxes: '>=1.0.0-beta.8'
+
+services:
+  ai-project:
+    host: azure.ai.project
+    endpoint: ${AZURE_AI_PROJECT_ENDPOINT}
+    deployments: []
+
+  # ---------------------------------------------------------------- shared
+  # Caldova's trusted business tools. The key lives in the project connection;
+  # no agent, prompt or skill ever sees it.
+  caldova-ops-conn:
+    host: azure.ai.connection
+    uses:
+      - ai-project
+    category: RemoteTool
+    target: ${CALDOVA_OPS_MCP_URL}
+    authType: CustomKeys
+    credentials:
+      type: CustomKeys
+      keys:
+        x-caldova-key: '${CALDOVA_OPS_MCP_KEY}'
+    env:
+      CALDOVA_OPS_MCP_URL: ${CALDOVA_OPS_MCP_URL}
+      CALDOVA_OPS_MCP_KEY: ${CALDOVA_OPS_MCP_KEY}
+
+  caldova-ops:
+    host: azure.ai.toolbox
+    uses:
+      - ai-project
+      - caldova-ops-conn
+    description: Caldova operations evidence (synthetic). Read-only records behind one MCP endpoint.
+    env:
+      CALDOVA_OPS_MCP_URL: ${CALDOVA_OPS_MCP_URL}
+    tools:
+      - type: mcp
+        server_label: caldova_ops
+        server_url: ${CALDOVA_OPS_MCP_URL}
+        connection: caldova-ops-conn
+        require_approval: never
+
+  # ---------------------------------------------------------------- demo 3: Run
+  caldova-ops-runtime:
+    host: azure.ai.agent
+    project: .
+    language: python
+    kind: hosted
+    name: caldova-ops-runtime
+    description: Production Caldova operations agent. Agent Framework code with a policy gate on its only write path and a persistent case file. Synthetic data.
+    uses:
+      - ai-project
+      - caldova-ops
+    codeConfiguration:
+      runtime: python_3_13
+      entryPoint: main.py
+      dependencyResolution: remote_build
+    protocols:
+      - protocol: responses
+        version: 2.0.0
+    env:
+      PYTHONNOUSERSITE: "1"
+      AZURE_AI_MODEL_DEPLOYMENT_NAME: ${AZURE_AI_MODEL_DEPLOYMENT_NAME}
+      TOOLBOX_ENDPOINT: ${TOOLBOX_CALDOVA_OPS_MCP_ENDPOINT}
+      CALDOVA_CASE_STORE: foundry          # cases in the Foundry durable state store
+    container:
+      resources:
+        cpu: "0.5"
+        memory: 1Gi
+    metadata:
+      tags:
+        - Agent Framework
+        - Responses Protocol
+        - Caldova
+
+  # Runs the hosted agent every weekday before the operations stand-up.
+  # Deployed disabled; dispatch it by hand: azd ai routine dispatch caldova-morning-sweep
+  caldova-morning-sweep:
+    host: azure.ai.routine
+    uses:
+      - caldova-ops-runtime
+    description: Weekday 06:00 UTC disruption sweep for the Caldova operations stand-up.
+    enabled: false
+    triggers:
+      default:
+        type: schedule
+        cronExpression: "0 6 * * 1-5"
+        timeZone: UTC
+    action:
+      type: invoke_agent_responses_api
+      agentName: caldova-ops-runtime
+      input: >-
+        Morning sweep for DISRUPT-001. Run plan_disruption_response on the current demand plan,
+        submit the compliant plan as case CASE-DISRUPT-001 (repeat submissions are idempotent),
+        then summarize blockers, uncovered units and pending approvals for the operations stand-up.
+
+infra:
+  provider: microsoft.foundry

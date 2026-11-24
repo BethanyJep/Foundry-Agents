@@ -1,0 +1,117 @@
+{
+  "scenario": "caldova-aller-capacity-disruption",
+  "version": "1.1",
+  "provenance": "Synthetic Caldova training scenario v1.1. Includes a disruption notice, capacity, route, risk, packet and contract records. No real pharmaceutical operations, suppliers, routes or patient data.",
+  "units": "fictional training units per week",
+  "documents": {
+    "DISRUPT-001": {
+      "owner": "Manufacturing Operations",
+      "title": "Disruption notice: ALLER tablet capacity gap",
+      "text": "Synthetic disruption notice v1.1: A sudden demand surge for ALLER tablets leaves Caldova's internal line short by an average of 1500 fictional training units per week for the next 6 weeks, 9000 units in total. The weekly shortfall varies; the planner's demand plan file gives week-by-week figures. Continuity of supply is the priority. Plans must use documented capacity and documented routes only. Manufacturing, Supply Chain Operations and Procurement remain accountable for the decision.",
+      "data": {
+        "average_weekly_gap": 1500,
+        "weeks": 6,
+        "total_gap": 9000,
+        "demand_plan_file": "aller-demand-plan.csv"
+      }
+    },
+    "CAP-001": {
+      "owner": "Manufacturing Operations",
+      "title": "Supplier capacity register",
+      "text": "Synthetic capacity register v1.0: Aster Ridge reports 1200 fictional training units per week of available capacity; qualification evidence is complete for this exercise. Northbank reports 1800 training units per week, but its qualification review is pending. These are planning estimates, not booked capacity. No source documents costs or lead times.",
+      "data": {
+        "suppliers": [
+          {"name": "Aster Ridge", "available_units_per_week": 1200, "qualification": "complete"},
+          {"name": "Northbank", "available_units_per_week": 1800, "qualification": "pending"}
+        ]
+      }
+    },
+    "CAP-POLICY": {
+      "owner": "Manufacturing Operations",
+      "title": "Capacity commitment policy",
+      "text": "Available capacity is not authorization. Procurement and Quality must approve supplier changes before any commitment. Pending qualification must be resolved by Quality. The agent cannot book capacity, amend a contract, or authorize manufacturing.",
+      "data": {
+        "supplier_commitment_approvers": ["Procurement", "Quality"],
+        "pending_qualification_owner": "Quality"
+      }
+    },
+    "DIST-001": {
+      "owner": "Supply Chain Operations",
+      "title": "Distribution route register",
+      "text": "Synthetic route register v1.0: Cedar has a 2-day transit and a maximum allocation of 600 fictional training units per week. Birch has a 4-day transit and a maximum allocation of 1000 training units per week. Route Elm has not been assessed; no transit or allocation values are available. No shipment has been booked.",
+      "data": {
+        "routes": [
+          {"name": "Cedar", "transit_days": 2, "max_units_per_week": 600, "assessed": true},
+          {"name": "Birch", "transit_days": 4, "max_units_per_week": 1000, "assessed": true},
+          {"name": "Elm", "transit_days": null, "max_units_per_week": null, "assessed": false}
+        ]
+      }
+    },
+    "DIST-POLICY": {
+      "owner": "Supply Chain Operations",
+      "title": "Distribution allocation policy",
+      "text": "Allocation changes require Distribution Lead and Quality approval. Route transit comparisons do not authorize shipment booking. The agent may compare and recommend, but cannot book shipments, change allocations, or certify a route. Missing route evidence must be escalated to Supply Chain Operations.",
+      "data": {
+        "allocation_change_approvers": ["Distribution Lead", "Quality"],
+        "missing_route_evidence_owner": "Supply Chain Operations"
+      }
+    },
+    "RISK-001": {
+      "owner": "Supplier Assurance",
+      "title": "Supplier observation log",
+      "text": "Synthetic supplier observation log v1.0: Aster Ridge has no overdue corrective actions in the supplied record. Northbank has two overdue corrective actions and an unresolved qualification review. The log contains no financial-solvency, clinical, or legal findings. Absence of a recorded issue is not proof of no risk.",
+      "data": {
+        "observations": [
+          {"supplier": "Aster Ridge", "overdue_corrective_actions": 0, "qualification_review_unresolved": false},
+          {"supplier": "Northbank", "overdue_corrective_actions": 2, "qualification_review_unresolved": true}
+        ]
+      }
+    },
+    "RISK-POLICY": {
+      "owner": "Supplier Assurance",
+      "title": "Supplier risk rubric",
+      "text": "Exercise rubric: an unresolved qualification review OR any overdue corrective action warrants elevated risk and escalation to Supplier Assurance and Quality. No such recorded signals means routine monitoring, not a safety certification. Blocking a supplier or changing contracts requires authorized Procurement and Quality decisions. The agent only recommends escalation.",
+      "data": {
+        "elevated_if": ["qualification_review_unresolved", "overdue_corrective_actions > 0"],
+        "escalate_to": ["Supplier Assurance", "Quality"],
+        "block_or_contract_change_approvers": ["Procurement", "Quality"]
+      }
+    },
+    "PACKET-001": {
+      "owner": "Quality Governance",
+      "title": "Change packet CP-104",
+      "text": "Synthetic change packet CP-104 v1.0 proposes a supplier change to Northbank. It contains a business rationale, capacity comparison, and supplier risk summary. Qualification evidence, a Procurement signature, a Quality signature, and a rollback plan are missing. No approval has been granted. The packet does not include route details.",
+      "data": {
+        "packet_id": "CP-104",
+        "proposed_supplier": "Northbank",
+        "present": ["business rationale", "capacity comparison", "supplier risk summary"],
+        "missing": ["qualification evidence", "Procurement signature", "Quality signature", "rollback plan"],
+        "approved": false
+      }
+    },
+    "PACKET-POLICY": {
+      "owner": "Quality Governance",
+      "title": "Supplier-change packet checklist",
+      "text": "A supplier-change packet requires rationale, capacity comparison, risk summary, qualification evidence, Procurement and Quality signatures, and a rollback plan. Quality owns qualification evidence and its signature; Procurement owns its signature; the change owner supplies the rollback plan. Completeness review does not constitute approval. Distribution Lead additionally approves changes affecting allocations. The agent cannot sign, grant approval, or invent records.",
+      "data": {
+        "item_owners": {
+          "qualification evidence": "Quality",
+          "Quality signature": "Quality",
+          "Procurement signature": "Procurement",
+          "rollback plan": "Change owner"
+        }
+      }
+    },
+    "CONTRACT-AR-001": {
+      "owner": "Procurement",
+      "title": "Aster Ridge statement of work (ALLER tablets)",
+      "text": "Synthetic statement of work v1.0: Aster Ridge's existing statement of work for ALLER tablets covers tablet compression, film coating, visual inspection and standard bottle packaging. Blister packs and market-specific cartons are not covered and require written authorization from Procurement before production.",
+      "data": {
+        "supplier": "Aster Ridge",
+        "covered": ["tablet compression", "film coating", "visual inspection", "standard bottle packaging"],
+        "requires_written_authorization": ["blister packs", "market-specific cartons"],
+        "authorization_owner": "Procurement"
+      }
+    }
+  }
+}
